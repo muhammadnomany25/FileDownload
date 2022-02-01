@@ -6,6 +6,6 @@ import dagger.Module
  * Created by Muhammad Noamany
  * Email: muhammadnoamany@gmail.com
  */
-@Module(includes = [ActivityBuilderModule::class, SharedModule::class])
+@Module(includes = [ActivityBuilderModule::class, SharedModule::class, NetworkModule::class])
 class AppModule {
 }
