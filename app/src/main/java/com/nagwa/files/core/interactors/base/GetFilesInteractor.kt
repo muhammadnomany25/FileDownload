@@ -1,7 +1,7 @@
 package com.nagwa.files.core.interactors.base
 
 import com.nagwa.files.core.data.repository.FileRepository
-import com.nagwa.files.core.data.source.local.entity.FileEntity
+import com.nagwa.files.core.domain.FileModel
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -12,9 +12,9 @@ import javax.inject.Inject
  * Email: muhammadnoamany@gmail.com
  */
 class GetFilesInteractor @Inject constructor(private val fileRepository: FileRepository) :
-    BaseInteractor<List<FileEntity>>() {
+    BaseInteractor<List<FileModel>>() {
 
-    override fun buildUseCase(): Single<List<FileEntity>> {
-        return fileRepository.getLocalFiles()
+    override fun buildUseCase(): Single<List<FileModel>> {
+        return fileRepository.getCloudFiles()
     }
 }
