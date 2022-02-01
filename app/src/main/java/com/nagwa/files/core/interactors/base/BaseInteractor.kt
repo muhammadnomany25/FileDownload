@@ -13,7 +13,7 @@ import io.reactivex.schedulers.Schedulers
  */
 abstract class BaseInteractor<T> {
     private var disposable: Disposable? = null
-    abstract fun buildUseCaseSingle(): Single<T>
+    abstract fun buildUseCase(): Single<T>
 
     /**
      * proceeding the use case and handles its results
@@ -24,7 +24,7 @@ abstract class BaseInteractor<T> {
         onFinished: () -> Unit = {}
     ) {
         dispose()
-        disposable = buildUseCaseSingle()
+        disposable = buildUseCase()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doAfterTerminate(onFinished)
