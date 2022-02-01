@@ -2,7 +2,7 @@ package com.nagwa.files.dagger.module
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.nagwa.files.data.shared_prefs.UserSaver
+import com.nagwa.files.shared_prefs.UserSaver
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

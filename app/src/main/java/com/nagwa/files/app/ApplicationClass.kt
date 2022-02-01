@@ -2,7 +2,7 @@ package com.nagwa.files.app
 
 import androidx.multidex.MultiDexApplication
 import com.nagwa.files.dagger.component.AppComponent
-import com.ganby.dagger.component.DaggerAppComponent
+import com.nagwa.files.dagger.component.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector

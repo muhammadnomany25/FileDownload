@@ -1,4 +1,4 @@
-package com.nagwa.files.data.shared_prefs
+package com.nagwa.files.shared_prefs
 
 import android.content.Context
 import android.content.SharedPreferences
