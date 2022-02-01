@@ -1,4 +1,4 @@
-package com.nagwa.movies
+package com.nagwa.files
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
