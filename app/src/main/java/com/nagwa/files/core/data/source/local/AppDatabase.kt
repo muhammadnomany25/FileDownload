@@ -3,6 +3,7 @@ package com.nagwa.files.core.data.source.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.nagwa.files.core.data.source.local.dao.FileDao
+import com.nagwa.files.core.data.source.local.entity.DownloadedFileEntity
 import com.nagwa.files.core.data.source.local.entity.FileEntity
 
 /**
@@ -11,7 +12,7 @@ import com.nagwa.files.core.data.source.local.entity.FileEntity
  * Created by Muhammad Noamany
  * Email: muhammadnoamany@gmail.com
  */
-@Database(entities = [FileEntity::class], version = 1, exportSchema = false)
+@Database(entities = [FileEntity::class, DownloadedFileEntity::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val fileDao: FileDao
