@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="elevation">1dp</dimen>
+    <dimen name="largeElevation">2dp</dimen>
+
+    <dimen name="small">@dimen/_2sdp</dimen>
+    <dimen name="xSmall">@dimen/_3sdp</dimen>
+    <dimen name="medium">@dimen/_4sdp</dimen>
+    <dimen name="large">@dimen/_6sdp</dimen>
+    <dimen name="xLarge">@dimen/_7sdp</dimen>
+    <dimen name="xxLarge">@dimen/_8sdp</dimen>
+    <dimen name="huge">@dimen/_12sdp</dimen>
+
+</resources>
