@@ -15,6 +15,7 @@ object BindingAdapterUtils {
     /**
      * Load image request using binding function
      */
+    @JvmStatic
     @BindingAdapter("imageUrl")
     fun loadImage(view: ImageView, imageUrl: String) {
         ImageLoader().loadImage(view.context, view, imageUrl as String?)

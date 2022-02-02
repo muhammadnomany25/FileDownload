@@ -2,8 +2,8 @@ package com.nagwa.files.utils
 
 import android.content.Context
 import android.widget.ImageView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
-import com.nagwa.files.R
 
 
 /**
@@ -19,7 +19,20 @@ class ImageLoader {
     fun loadImage(activity: Context?, imageView: ImageView?, url: String?) {
         if (url == null || url.isEmpty() || imageView == null) return
         Glide.with(activity!!).load(url)
-            .placeholder(R.drawable.ic_placeholder)
+            .centerCrop()
+            .override(256)
+            .placeholder(buildCircularProgress(activity))
             .into(imageView)
+    }
+
+    /**
+     * Build Circular Progress to be showing when image is loading
+     */
+    private fun buildCircularProgress(activity: Context?): CircularProgressDrawable {
+        val circularProgressDrawable = CircularProgressDrawable(activity!!)
+        circularProgressDrawable.strokeWidth = 5f
+        circularProgressDrawable.centerRadius = 30f
+        circularProgressDrawable.start()
+        return circularProgressDrawable
     }
 }

@@ -8,6 +8,8 @@
         <variable
             name="dataModel"
             type="com.nagwa.files.core.data.source.local.entity.FileStatusModel" />
+
+        <import type="com.nagwa.files.presentation.home.FileType" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,7 +55,7 @@
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_gravity="start|center"
-                        android:src=""
+                        android:src="@{dataModel.type.equals(FileType.PDF.value)?@drawable/ic_book_file:@drawable/ic_video_file}"
                         tools:src="@drawable/ic_book_file" />
 
                     <TextView
@@ -67,13 +69,27 @@
                         android:textAlignment="viewStart"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_18ssp"
+                        android:textStyle="bold"
                         tools:text="Dummy FIle Name" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/medium">
 
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:id="@+id/downloadIV"
+                            android:layout_width="@dimen/_24sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="start|center"
+                            android:src="@drawable/ic_download_file"
+                            app:tint="@color/white" />
                     </LinearLayout>
                 </LinearLayout>
 

@@ -5,5 +5,5 @@ package com.nagwa.files.constants
  * Email: muhammadnoamany@gmail.com
  */
 object Constants {
-    val BASE_URL = "https://nagwa.free.beeceptor.com/"
+    val BASE_URL = "https://movies.free.beeceptor.com/"
 }
