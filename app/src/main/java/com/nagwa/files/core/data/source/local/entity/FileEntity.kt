@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
  */
 @Entity(tableName = "File")
 data class FileEntity(
-    @PrimaryKey var id: Int,
+    @PrimaryKey var id: Int=0,
     val type: String = "",
     val url: String = "",
     val name: String = ""

@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Movies">
         <activity
-            android:name="com.nagwa.files.MainActivity"
+            android:name="com.nagwa.files.presentation.home.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

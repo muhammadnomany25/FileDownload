@@ -1,5 +1,6 @@
 package com.nagwa.files.dagger.component
 
+import android.app.Application
 import android.content.Context
 import com.nagwa.files.app.ApplicationClass
 import com.nagwa.files.dagger.module.AppModule
@@ -21,6 +22,8 @@ public interface AppComponent {
    public interface Builder {
         @BindsInstance
         fun context(context: Context): Builder
+        @BindsInstance
+        fun application(application: Application): Builder
         fun build(): AppComponent
 
     }

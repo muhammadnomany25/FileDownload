@@ -12,6 +12,6 @@ import retrofit2.http.GET
  */
 interface ApiInterface {
 
-    @GET("albums/")
+    @GET("/movies")
     fun fetchFiles(): Single<List<FileModel>>
 }

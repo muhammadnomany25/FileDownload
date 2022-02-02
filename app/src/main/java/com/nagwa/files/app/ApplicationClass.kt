@@ -14,7 +14,7 @@ import javax.inject.Inject
  * Email: muhammadnoamany@gmail.com
  */
 class ApplicationClass : MultiDexApplication(), HasAndroidInjector {
-    private lateinit var appComponent: AppComponent
+    lateinit var appComponent: AppComponent
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
@@ -31,6 +31,7 @@ class ApplicationClass : MultiDexApplication(), HasAndroidInjector {
     private fun initDagger() {
         appComponent = DaggerAppComponent.builder()
             .context(this.applicationContext)
+            .application(this)
             .build()
         appComponent.inject(this)
     }
