@@ -3,6 +3,7 @@ package com.nagwa.files.core.data.repository
 import com.nagwa.files.core.data.source.local.AppDatabase
 import com.nagwa.files.core.data.source.local.dao.FileDao
 import com.nagwa.files.core.data.source.local.entity.FileEntity
+import com.nagwa.files.core.data.source.local.entity.FileStatusModel
 import com.nagwa.files.core.data.source.remote.ApiInterface
 import com.nagwa.files.core.domain.FileModel
 import io.reactivex.Single
@@ -26,7 +27,7 @@ class FileRepository(private val apiInterface: ApiInterface, private val appData
     /**
      * Load files from local database
      */
-    override fun getLocalFiles(): Single<List<FileEntity>> {
+    override fun getLocalFiles(): Single<List<FileStatusModel>> {
         return appDatabase.fileDao.loadAll()
     }
 

@@ -1,6 +1,7 @@
 package com.nagwa.files.core.data.repository
 
 import com.nagwa.files.core.data.source.local.entity.FileEntity
+import com.nagwa.files.core.data.source.local.entity.FileStatusModel
 import com.nagwa.files.core.domain.FileModel
 import io.reactivex.Single
 
@@ -12,6 +13,6 @@ import io.reactivex.Single
  */
 interface FileDataSource {
     fun getCloudFiles(): Single<List<FileModel>>
-    fun getLocalFiles(): Single<List<FileEntity>>
+    fun getLocalFiles(): Single<List<FileStatusModel>>
     fun setDownloaded(file: FileEntity)
 }

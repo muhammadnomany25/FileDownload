@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.nagwa.files.core.data.source.local.entity.DownloadedFileEntity
 import com.nagwa.files.core.data.source.local.entity.FileEntity
+import com.nagwa.files.core.data.source.local.entity.FileStatusModel
 import io.reactivex.Single
 
 /**
@@ -18,10 +19,10 @@ import io.reactivex.Single
 interface FileDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(fileList: List<FileEntity>): List<Long>
+    fun insert(fileList: List<FileEntity>)
 
     @Query("SELECT * FROM File")
-    fun loadAll(): Single<List<FileEntity>>
+    fun loadAll(): Single<List<FileStatusModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertDownloaded(downloadedFileEntity: DownloadedFileEntity): Long
