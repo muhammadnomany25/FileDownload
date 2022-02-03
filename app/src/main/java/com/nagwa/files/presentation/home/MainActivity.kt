@@ -1,24 +1,35 @@
 package com.nagwa.files.presentation.home
 
+import android.Manifest
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.webkit.URLUtil
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.nagwa.files.R
 import com.nagwa.files.core.data.source.local.entity.DownloadedFileEntity
 import com.nagwa.files.core.data.source.local.entity.FileStatusModel
 import com.nagwa.files.databinding.ActivityMainBinding
 import com.nagwa.files.presentation.base.BaseVmActivity
+import com.nagwa.files.presentation.home.adapter.FilesAdapter
+import com.nagwa.files.utils.FileUtils.accessAllFile
 import com.nagwa.files.utils.FileUtils.getExtensionFileBased
 import com.nagwa.files.utils.FileUtils.getFilePath
 import com.nagwa.files.utils.IntentUtils
@@ -53,7 +64,7 @@ class MainActivity : BaseVmActivity<ActivityMainBinding, FilesViewModel>(), IFil
                 if (adapter != null) adapter.updateFileStatus(
                     downloadIDs[id]!!.second,
                     downloadIDs[id]!!.first,
-                    true
+                    false
                 )
                 updateFileInLocalDB(id)
                 downloadIDs.remove(id)
@@ -139,9 +150,21 @@ class MainActivity : BaseVmActivity<ActivityMainBinding, FilesViewModel>(), IFil
      * Start downloading a file
      */
     override fun downloadFile(fileStatusModel: FileStatusModel) {
+        if (checkPermission()) {
+            enqueueRequestToDownloadManager(fileStatusModel)
+        } else {
+            requestPermission { enqueueRequestToDownloadManager(fileStatusModel) }
+        }
+    }
+
+    /**
+     * Send the file download request to the download manager and proceed it
+     */
+    private fun enqueueRequestToDownloadManager(fileStatusModel: FileStatusModel) {
+        adapter.updateFileStatus(fileStatusModel.id, -1, true)
         val fileUrl = fileStatusModel.url
         if (!URLUtil.isValidUrl(fileUrl)) return
-        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         val uri: Uri = Uri.parse(fileUrl)
         val request = DownloadManager.Request(uri)
         request.setTitle(getString(R.string.app_name))
@@ -177,5 +200,77 @@ class MainActivity : BaseVmActivity<ActivityMainBinding, FilesViewModel>(), IFil
         if (viewModel != null) viewModel!!.dispose()
     }
 
+
+    private fun checkPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            val result =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+            val result1 =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    private fun requestPermission(action: () -> Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Dexter.withContext(this)
+                .withPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+
+                        if (report?.areAllPermissionsGranted() == true) {
+                            action.invoke()
+                        } else {
+                            accessAllFile(this@MainActivity)
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        permissions: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+                })
+                .onSameThread()
+                .check()
+        } else {
+            Dexter.withContext(this)
+                .withPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+
+                        if (report?.areAllPermissionsGranted() == true) {
+                            action.invoke()
+                        } else {
+                            errorMsg("Allow permission for storage access!")
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        permissions: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+                })
+                .onSameThread()
+                .check()
+        }
+
+    }
+
+    private fun errorMsg(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+    }
 
 }

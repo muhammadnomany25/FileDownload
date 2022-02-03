@@ -1,12 +1,17 @@
 package com.nagwa.files.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.DownloadManager
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import android.webkit.MimeTypeMap
+import androidx.annotation.RequiresApi
 import com.nagwa.files.core.data.source.local.entity.FileStatusModel
 import com.nagwa.files.presentation.home.FileType
 import java.io.File
@@ -75,5 +80,14 @@ object FileUtils {
             // No extension.
             ""
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    fun accessAllFile(context: Context){
+        val intent = Intent()
+        intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+        val uri: Uri = Uri.fromParts("package", context.packageName, null)
+        intent.data = uri
+        context.startActivity(intent)
     }
 }
