@@ -1,34 +1,40 @@
 package com.nagwa.files.presentation.home
 
-import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.View
-import android.webkit.MimeTypeMap
 import android.webkit.URLUtil
 import android.widget.Toast
-import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import com.nagwa.files.BuildConfig
 import com.nagwa.files.R
 import com.nagwa.files.core.data.source.local.entity.DownloadedFileEntity
 import com.nagwa.files.core.data.source.local.entity.FileStatusModel
 import com.nagwa.files.databinding.ActivityMainBinding
 import com.nagwa.files.presentation.base.BaseVmActivity
+import com.nagwa.files.utils.FileUtils.getExtensionFileBased
+import com.nagwa.files.utils.FileUtils.getFilePath
+import com.nagwa.files.utils.IntentUtils
 import java.io.File
 
 
 class MainActivity : BaseVmActivity<ActivityMainBinding, FilesViewModel>(), IFileDownload {
+    /**
+     * @usage start the activity from anyWhere of the app
+     */
+    fun start(context: Context) {
+        val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        context.startActivity(intent)
+    }
+
     private var downloadIDs = HashMap<Long, Pair<Long, Int>>()
     private lateinit var adapter: FilesAdapter
 
@@ -146,7 +152,7 @@ class MainActivity : BaseVmActivity<ActivityMainBinding, FilesViewModel>(), IFil
                 File(
                     Environment.getExternalStoragePublicDirectory(
                         Environment.DIRECTORY_DOCUMENTS
-                    ).path + "/" + fileStatusModel.name + ".${getMimeType(fileUrl)}"
+                    ).path + "/" + fileStatusModel.name + ".${getExtensionFileBased(fileStatusModel)}"
                 )
             )
         )
@@ -154,76 +160,13 @@ class MainActivity : BaseVmActivity<ActivityMainBinding, FilesViewModel>(), IFil
         downloadIDs[downloadId] = Pair(downloadId, fileStatusModel.id)
     }
 
-    fun getMimeType(url: String?): String? {
-        var type: String? = null
-        val extension = MimeTypeMap.getFileExtensionFromUrl(url)
-        if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
-        }
-        return extension
-    }
 
     /**
      * Open downloaded file
      */
     override fun openFile(fileStatusModel: FileStatusModel) {
-        val filePath = getFilePath(fileStatusModel.downloadedFileEntity!!.downloadManagerId)
-        openFile(filePath!!)
-    }
-
-    @SuppressLint("Range")
-    fun getFilePath(downloadId: Long): File? {
-        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val c: Cursor = downloadManager.query(DownloadManager.Query().setFilterById(downloadId))
-        if (c != null) {
-            c.moveToFirst()
-            try {
-                val fileUri: String =
-                    c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
-                val mFile = File(Uri.parse(fileUri).path)
-                val fileName = mFile.absolutePath
-                return mFile
-            } catch (e: Exception) {
-                Log.e("error", "Could not open the downloaded file")
-                return null
-            }
-        } else return null
-    }
-
-    fun openFile(file: File?) {
-        val fileUri = file?.let {
-            FileProvider.getUriForFile(
-                this, BuildConfig.APPLICATION_ID + ".provider",
-                it
-            )
-        }
-        val intent = Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(fileUri, file?.let { getMimeType(it) })
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        startActivity(intent)
-    }
-
-    //file extension
-    fun getMimeType(file: File): String {
-        val extension = getExtension(file.name) ?: ""
-        return if (extension.isNotEmpty()) MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-            extension.substring(1)
-        ).toString() else "application/octet-stream"
-
-    }
-
-    fun getExtension(uri: String?): String? {
-        if (uri == null) {
-            return null
-        }
-
-        val dot = uri.lastIndexOf(".")
-        return if (dot >= 0) {
-            uri.substring(dot)
-        } else {
-            // No extension.
-            ""
-        }
+        val filePath = getFilePath(this, fileStatusModel.downloadedFileEntity!!.downloadManagerId)
+        IntentUtils.openFile(this, filePath!!)
     }
 
     /**
