@@ -8,4 +8,5 @@ import com.nagwa.files.core.data.source.local.entity.FileStatusModel
  */
 interface IFileDownload {
     fun downloadFile(fileStatusModel: FileStatusModel)
+    fun openFile(fileStatusModel: FileStatusModel)
 }

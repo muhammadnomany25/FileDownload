@@ -1,5 +1,6 @@
 package com.nagwa.files.core.data.source.local.entity
 
+import androidx.room.Ignore
 import androidx.room.Relation
 
 /**
@@ -13,9 +14,10 @@ data class FileStatusModel(
     val type: String = "",
     val url: String = "",
     val name: String = "",
+    var showProgress: Boolean = false,
     @Relation(
         parentColumn = "id",
         entityColumn = "fileId"
     )
-    val downloadedFileEntity: DownloadedFileEntity? = null
+    var downloadedFileEntity: DownloadedFileEntity? = null
 )

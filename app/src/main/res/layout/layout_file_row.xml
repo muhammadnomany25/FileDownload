@@ -10,6 +10,8 @@
             type="com.nagwa.files.core.data.source.local.entity.FileStatusModel" />
 
         <import type="com.nagwa.files.presentation.home.FileType" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,25 +74,43 @@
                         android:textStyle="bold"
                         tools:text="Dummy FIle Name" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/medium">
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end">
 
                         <ImageView
                             android:id="@+id/downloadIV"
                             android:layout_width="@dimen/_24sdp"
                             android:layout_height="@dimen/_20sdp"
+                            android:layout_centerInParent="true"
                             android:layout_gravity="start|center"
                             android:src="@drawable/ic_download_file"
+                            android:visibility="@{(dataModel.downloadedFileEntity==null &amp; !dataModel.showProgress )? View.VISIBLE:View.GONE}"
                             app:tint="@color/white" />
-                    </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/openFileIV"
+                            android:layout_width="@dimen/_24sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="start|center"
+                            android:src="@drawable/ic_open_file"
+                            android:visibility="@{(dataModel.downloadedFileEntity!=null &amp; !dataModel.showProgress )? View.VISIBLE:View.GONE}" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:visibility="@{dataModel.showProgress ? View.VISIBLE:View.GONE}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </RelativeLayout>
+
                 </LinearLayout>
 
             </RelativeLayout>

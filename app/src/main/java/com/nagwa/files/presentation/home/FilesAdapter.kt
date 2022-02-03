@@ -1,11 +1,15 @@
 package com.nagwa.files.presentation.home
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.webkit.URLUtil
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.nagwa.files.R
+import com.nagwa.files.core.data.source.local.entity.DownloadedFileEntity
 import com.nagwa.files.core.data.source.local.entity.FileStatusModel
 import com.nagwa.files.databinding.LayoutFileRowBinding
 
@@ -13,9 +17,9 @@ import com.nagwa.files.databinding.LayoutFileRowBinding
  * Created by Muhammad Noamany
  * Email: muhammadnoamany@gmail.com
  */
-class FilesAdapter(val mListener: IFileDownload) :
+class FilesAdapter(val context: Context) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+    private val mListener: IFileDownload = context as IFileDownload
     private val files: MutableList<FileStatusModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -43,6 +47,16 @@ class FilesAdapter(val mListener: IFileDownload) :
         notifyDataSetChanged()
     }
 
+    fun updateFileStatus(id: Int, downloadId: Long, downloaded: Boolean) {
+        if (downloaded) {
+            val file = files.find { it.id == id }!!
+            file.showProgress = false
+            file.downloadedFileEntity =
+                DownloadedFileEntity(0, id, downloadId)
+        }
+        notifyItemChanged(files.indexOf(files.find { it.id == id }))
+    }
+
     inner class FileViewHolder(private val dataBinding: ViewDataBinding) :
         RecyclerView.ViewHolder(dataBinding.root) {
 
@@ -52,8 +66,17 @@ class FilesAdapter(val mListener: IFileDownload) :
                 dataModel = file
             }
 
-            itemView.setOnClickListener {
+            dataBinding.downloadIV.setOnClickListener {
+                if (!URLUtil.isValidUrl(file.url)) {
+                    Toast.makeText(context, "Invalid Url to download!", Toast.LENGTH_LONG).show()
+                    return@setOnClickListener
+                }
+                file.showProgress = true
+                notifyItemChanged(files.indexOf(files.find { it.id == file.id }))
                 mListener.downloadFile(file)
+            }
+            dataBinding.openFileIV.setOnClickListener {
+                mListener.openFile(file)
             }
         }
     }

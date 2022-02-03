@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/drawable/ic_video_file.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.19610507246376813" />
-        <entry key="app/src/main/res/layout/layout_file_row.xml" value="0.1" />
+        <entry key="..\:/studio projects/test/FileDownload/app/src/main/res/drawable/ic_mask_bg.xml" value="0.136" />
+        <entry key="..\:/studio projects/test/FileDownload/app/src/main/res/drawable/ic_open_file.xml" value="0.1525" />
+        <entry key="..\:/studio projects/test/FileDownload/app/src/main/res/layout/activity_main.xml" value="0.10235507246376811" />
+        <entry key="..\:/studio projects/test/FileDownload/app/src/main/res/layout/layout_file_row.xml" value="0.152" />
+        <entry key="..\:/studio projects/test/FileDownload/app/src/main/res/xml/provider_paths.xml" value="0.1570945945945946" />
       </map>
     </option>
   </component>

@@ -10,4 +10,4 @@ import androidx.room.PrimaryKey
  * Email: muhammadnoamany@gmail.com
  */
 @Entity(tableName = "Downloaded")
-data class DownloadedFileEntity(@PrimaryKey val id: Int, val fileId: Int)
+data class DownloadedFileEntity(@PrimaryKey val id: Int, val fileId: Int, var downloadManagerId:Long)

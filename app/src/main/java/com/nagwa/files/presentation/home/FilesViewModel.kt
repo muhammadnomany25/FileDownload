@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.nagwa.files.core.data.mapper.FileMapper
 import com.nagwa.files.core.data.source.local.AppDatabase
+import com.nagwa.files.core.data.source.local.entity.DownloadedFileEntity
 import com.nagwa.files.core.interactors.base.GetFilesInteractor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -52,6 +53,13 @@ class FilesViewModel @Inject constructor(
                 fileUiModel.status.value = Status.ERROR.value
                 Log.e(TAG, it.localizedMessage)
             })
+    }
+
+    /**
+     * Mark file as downloaded in the db
+     */
+    fun insertDownloaded(downloadedFileEntity: DownloadedFileEntity) {
+        appDatabase.fileDao.insertDownloaded(downloadedFileEntity)
     }
 
     /**
